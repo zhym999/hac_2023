@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Carte Leaflet avec données de latitude et longitude</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+    <style>
+        #map {
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+    <script>
+       var map = L.map('map').setView([51.505, -0.09], 13); // Centrez la carte sur Paris, avec un zoom de 10
+
+        // Ajoutez une couche de tuiles OpenStreetMap à la carte
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+
+    var marker = L.marker([51.5, -0.09]).addTo(map)
+               
+
+    var circle = L.circle([51.508, -0.11], {
+    color: 'red',
+    fillColor: '#f03',
+    fillOpacity: 0.5,
+    radius: 500
+    }).addTo(map);
+
+    var littleton = L.marker([39.61, -105.02]).bindPopup('This is Littleton, CO.'),
+    denver    = L.marker([39.74, -104.99]).bindPopup('This is Denver, CO.'),
+    aurora    = L.marker([39.73, -104.8]).bindPopup('This is Aurora, CO.'),
+    golden    = L.marker([39.77, -105.23]).bindPopup('This is Golden, CO.');
+
+    var cities = L.layerGroup([littleton, denver, aurora, golden]).addTo(map);
+
+    var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+});
+
+var osmHOT = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap contributors, Tiles style by Humanitarian OpenStreetMap Team hosted by OpenStreetMap France'});
+
+var map = L.map('map', {
+    center: [39.73, -104.99],
+    zoom: 10,
+    layers: [osm, cities]
+});
+
+var baseMaps = {
+    "OpenStreetMap": osm,
+    "OpenStreetMap.HOT": osmHOT
+};
+
+var overlayMaps = {
+    "Cities": cities
+};
+
+var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+ var baseMaps = {
+    "OpenStreetMap": osm,
+    "<span style='color: red'>OpenStreetMap.HOT</span>": osmHOT
+}; 
+
+var crownHill = L.marker([39.75, -105.09]).bindPopup('This is Crown Hill Park.'),
+    rubyHill = L.marker([39.68, -105.00]).bindPopup('This is Ruby Hill Park.');
+    
+var parks = L.layerGroup([crownHill, rubyHill]);
+var openTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: 'Map data: © OpenStreetMap contributors, SRTM | Map style: © OpenTopoMap (CC-BY-SA)'
+});
+
+layerControl.addBaseLayer(openTopoMap, "OpenTopoMap");
+layerControl.addOverlay(parks, "Parks");
+
+        // Les données de latitude et de longitude depuis votre dataset en PHP
+        
+    </script>
+</body>
+</html>
